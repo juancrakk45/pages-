@@ -1,31 +1,165 @@
-// Variables globales
+// --- CONFIGURACIÓN DE GALERÍA ---
 let currentMediaIndex = 0;
-const totalMedia = 4;
-let letterIndex = 0;
-const typingSpeed = 50;
+const itemsPerPage = 3;
 
-// Contenido de medios (reemplaza con tus fotos/videos reales)
+// Lista de imágenes
 const mediaContent = [
-    {
-        type: 'image',
-        src: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDQwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjZmY2YjlkIi8+Cjx0ZXh0IHg9IjIwMCIgeT0iMTgwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjI0IiBmb250LXdlaWdodD0iYm9sZCI+Rm90byAxPC90ZXh0Pgo8dGV4dCB4PSIyMDAiIHk9IjIyMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCI+UmVjdWVyZG9zIEVzcGVjaWFsZXM8L3RleHQ+Cjwvc3ZnPg=='
-    },
-    {
-        type: 'image',
-        src: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDQwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjOGU0NGFkIi8+Cjx0ZXh0IHg9IjIwMCIgeT0iMTgwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjI0IiBmb250LXdlaWdodD0iYm9sZCI+Rm90byAyPC90ZXh0Pgo8dGV4dCB4PSIyMDAiIHk9IjIyMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCI+TW9tZW50b3MgVW5pY29zPC90ZXh0Pgo8L3N2Zz4='
-    },
-    {
-        type: 'video',
-        src: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDQwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjZmYxNDkzIi8+Cjx0ZXh0IHg9IjIwMCIgeT0iMTgwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjI0IiBmb250LXdlaWdodD0iYm9sZCI+VmlkZW8gMTwvdGV4dD4KPHN2ZyB4PSIxNzUiIHk9IjIwMCIgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9IndoaXRlIj4KPGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTAiLz4KPHBvbHlnb24gcG9pbnRzPSIxMCw4IDE2LDEyIDEwLDE2Ii8+Cjwvc3ZnPgo8dGV4dCB4PSIyMDAiIHk9IjI3MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCI+UmVjdWVyZG9zIGVuIE1vdmltaWVudG88L3RleHQ+Cjwvc3ZnPg=='
-    },
-    {
-        type: 'image',
-        src: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDQwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjYzQ0NjkzIi8+Cjx0ZXh0IHg9IjIwMCIgeT0iMTgwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjI0IiBmb250LXdlaWdodD0iYm9sZCI+Rm90byA0PC90ZXh0Pgo8dGV4dCB4PSIyMDAiIHk9IjIyMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCI+U29ucmlzYXMgeSBBbGVncsOtYTwvdGV4dD4KPC9zdmc+'
-    }
+    { type: "image", src: "imagen/1.jpg", alt: "Foto especial 1" },
+    { type: "image", src: "imagen/2.jpg", alt: "Foto especial 2" },
+    { type: "image", src: "imagen/3.jpg", alt: "Foto especial 3" },
+    { type: "image", src: "imagen/4.jpg", alt: "Foto especial 4" },
+    { type: "image", src: "imagen/5.jpg", alt: "Foto especial 5" },
+    { type: "image", src: "imagen/6.jpg", alt: "Foto especial 6" },
+    { type: "image", src: "imagen/7.jpg", alt: "Foto especial 7" },
+    { type: "image", src: "imagen/8.jpg", alt: "Foto especial 8" },
+    { type: "image", src: "imagen/9.jpg", alt: "Foto especial 9" },
+    { type: "image", src: "imagen/10.jpg", alt: "Foto especial 10" },
+    { type: "image", src: "imagen/11.jpg", alt: "Foto especial 11" },
+    { type: "image", src: "imagen/12.jpg", alt: "Foto especial 12" },
+    { type: "image", src: "imagen/13.jpg", alt: "Foto especial 13" },
+    { type: "image", src: "imagen/14.jpg", alt: "Foto especial 14" },
+    { type: "image", src: "imagen/15.jpg", alt: "Foto especial 15" },
+    { type: "image", src: "imagen/16.jpg", alt: "Foto especial 16" },
+    { type: "image", src: "imagen/17.jpg", alt: "Foto especial 17" },
+    { type: "image", src: "imagen/18.jpg", alt: "Foto especial 18" },
+    { type: "image", src: "imagen/19.jpg", alt: "Foto especial 19" },
+    { type: "image", src: "imagen/20.jpg", alt: "Foto especial 20" },
+    { type: "image", src: "imagen/21.jpg", alt: "Foto especial 21" }, 
 ];
 
-// Texto de la carta
-const fullLetterText = `Querida Natalia,
+let totalMedia = mediaContent.length;
+
+// ===== FUNCIONES AUXILIARES =====
+function createImageElement(media) {
+    return new Promise((resolve) => {
+        const img = document.createElement('img');
+        img.className = 'media-display fade-in';
+        img.alt = media.alt || 'Foto especial';
+        img.style.opacity = '0';
+        img.onload = () => {
+            img.style.transition = 'opacity .25s';
+            img.style.opacity = '1';
+            resolve(img);
+        };
+        img.onerror = () => {
+            console.error('Error cargando imagen:', media.src);
+            img.style.opacity = '1';
+            img.alt = 'Imagen no disponible';
+            resolve(img);
+        };
+        img.src = media.src;
+    });
+}
+
+function createVideoElement(media) {
+    return new Promise((resolve) => {
+        const video = document.createElement('video');
+        video.className = 'media-display fade-in';
+        video.controls = true;
+        video.muted = true;
+        video.preload = 'metadata';
+        video.playsInline = true;
+        video.style.opacity = '0';
+        video.onloadeddata = () => {
+            video.style.transition = 'opacity .25s';
+            video.style.opacity = '1';
+            resolve(video);
+        };
+        video.onerror = () => {
+            console.error('Error cargando video:', media.src);
+            resolve(video);
+        };
+        video.src = media.src;
+    });
+}
+
+// ===== Mostrar 3 elementos =====
+async function updateMediaDisplay() {
+    const container = document.getElementById("mediaContainer");
+    const counter = document.getElementById("galleryCounter");
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const continueBtn = document.getElementById("continueBtn");
+
+    if (!container || !counter) return;
+
+    container.innerHTML = "";
+
+    const start = currentMediaIndex;
+    const end = Math.min(start + itemsPerPage, totalMedia);
+    const group = mediaContent.slice(start, end);
+
+    const createdElements = await Promise.all(group.map(media => {
+        if (media.type === 'image') return createImageElement(media);
+        if (media.type === 'video') return createVideoElement(media);
+        return Promise.resolve(document.createTextNode('Tipo no soportado'));
+    }));
+
+    createdElements.forEach(el => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'media-wrapper';
+        wrapper.appendChild(el);
+        container.appendChild(wrapper);
+    });
+
+    const totalPages = Math.ceil(totalMedia / itemsPerPage) || 1;
+    const currentPage = Math.floor(currentMediaIndex / itemsPerPage) + 1;
+    counter.textContent = `Página ${currentPage} de ${totalPages}`;
+
+    if (prevBtn) prevBtn.disabled = start === 0;
+
+    if (nextBtn && continueBtn) {
+        if (end >= totalMedia) {
+            nextBtn.classList.add('hidden');
+            continueBtn.classList.remove('hidden');
+        } else {
+            nextBtn.classList.remove('hidden');
+            continueBtn.classList.add('hidden');
+        }
+    }
+
+    const gallerySection = document.getElementById('gallerySection');
+    if (gallerySection) gallerySection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// ===== Navegación manual =====
+// ===== Navegación manual =====
+function nextMedia() {
+    const nextIndex = currentMediaIndex + itemsPerPage;
+    if (nextIndex < totalMedia) {
+        currentMediaIndex = nextIndex;
+    }
+    updateMediaDisplay();
+}
+
+function previousMedia() {
+    const prevIndex = currentMediaIndex - itemsPerPage;
+    if (prevIndex >= 0) {
+        currentMediaIndex = prevIndex;
+    }
+    updateMediaDisplay();
+}
+
+// ===== Abrir regalo =====
+function openGift() {
+    const giftSection = document.getElementById("giftSection");
+    const gallerySection = document.getElementById("gallerySection");
+
+    if (!giftSection || !gallerySection) return;
+
+    giftSection.classList.add('fade-out');
+    setTimeout(() => {
+        giftSection.style.display = 'none';
+        gallerySection.style.display = 'flex';
+        gallerySection.classList.add('fade-in');
+
+        currentMediaIndex = 0;
+        updateMediaDisplay();
+    }, 800);
+}
+
+// ===== Carta y corazón =====
+const letterMessage = `Querida Natalia,
 
 Hoy es un día muy especial, porque celebramos tus 15 años. Es increíble ver cómo has crecido y te has convertido en la persona maravillosa que eres hoy.
 
@@ -42,15 +176,133 @@ Recuerda siempre que eres amada más de lo que las palabras pueden expresar, y q
 Con todo nuestro amor,
 Tu familia que te adora`;
 
-// ===== FUNCIONES PRINCIPALES =====
+let charIndex = 0;
+function typeLetter() {
+    const letterText = document.getElementById("letterText");
+    const cursor = document.getElementById("typingCursor");
 
-// Crear efectos de partículas para el regalo
+    if (!letterText) return;
+
+    if (charIndex < letterMessage.length) {
+        letterText.innerHTML += letterMessage.charAt(charIndex);
+        charIndex++;
+        setTimeout(typeLetter, 50);
+    } else {
+        if (cursor) cursor.style.display = "none";
+
+        // Contador antes del corazón
+        const countdown = document.createElement("div");
+        countdown.id = "countdown";
+        countdown.textContent = "El corazón aparecerá en 10 segundos...";
+        countdown.style.marginTop = "20px";
+        countdown.style.fontSize = "1.2rem";
+        countdown.style.color = "#ff4081";
+        countdown.style.textAlign = "center";
+        document.getElementById("letterSection").appendChild(countdown);
+
+        let timeLeft = 10;
+        const timer = setInterval(() => {
+            timeLeft--;
+            countdown.textContent = `Espera ${timeLeft} segundos...`;
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                countdown.textContent = "❤️ Aquí viene la sorpresa...";
+                setTimeout(showFinal, 1000);
+            }
+        }, 1000);
+    }
+}
+
+function goToLetter() {
+    const gallerySection = document.getElementById("gallerySection");
+    const letterSection = document.getElementById("letterSection");
+
+    if (gallerySection && letterSection) {
+        gallerySection.classList.add('fade-out');
+        setTimeout(() => {
+            gallerySection.style.display = 'none';
+            letterSection.style.display = 'flex';
+            letterSection.classList.add('fade-in');
+            setTimeout(() => {
+                typeLetter();
+            }, 1000);
+        }, 800);
+    }
+}
+
+function showFinal() {
+    const letterSection = document.getElementById("letterSection");
+    const finalSection = document.getElementById("finalSection");
+
+    if (!letterSection || !finalSection) return;
+
+    letterSection.classList.add('fade-out');
+    setTimeout(() => {
+        letterSection.style.display = 'none';
+        finalSection.style.display = 'flex';
+        finalSection.classList.add('fade-in');
+        createHeart();
+    }, 800);
+}
+
+function createHeart() {
+    const heartContainer = document.getElementById("heartContainer");
+    const heartPattern = [
+        "0011101111000",
+        "0111111111100",
+        "1111111111110",
+        "1111111111110",
+        "1111111111110",
+        "0111111111100",
+        "0011111111000",
+        "0001111110000",
+        "0000111100000",
+        "0000011000000"
+    ];
+
+    if (!heartContainer) return;
+
+    const pixelSize = 20;
+    heartContainer.style.width = heartPattern[0].length * pixelSize + "px";
+    heartContainer.style.height = heartPattern.length * pixelSize + "px";
+
+    heartContainer.innerHTML = "";
+
+    heartPattern.forEach((row, y) => {
+        [...row].forEach((cell, x) => {
+            if (cell === "1") {
+                const pixel = document.createElement("div");
+                pixel.className = "heart-pixel";
+                pixel.style.left = `${x * pixelSize}px`;
+                pixel.style.top = `${y * pixelSize}px`;
+                heartContainer.appendChild(pixel);
+
+                setTimeout(() => {
+                    pixel.classList.add("animate");
+                }, (x + y) * 100);
+            }
+        });
+    });
+
+    setInterval(() => {
+        const sparkle = document.createElement("div");
+        sparkle.className = "sparkle-final";
+        sparkle.textContent = "✨";
+        sparkle.style.left = Math.random() * 100 + "%";
+        sparkle.style.top = Math.random() * 100 + "%";
+        document.getElementById("finalSection").appendChild(sparkle);
+
+        setTimeout(() => sparkle.remove(), 3000);
+    }, 800);
+}
+
+// ===== Partículas en el regalo =====
 function createSparkles() {
     const sparklesContainer = document.querySelector('.sparkles');
     if (!sparklesContainer) return;
-    
+
     const sparkleSymbols = ['✨', '⭐', '💫', '🌟'];
-    
+
     setInterval(() => {
         const sparkle = document.createElement('div');
         sparkle.className = 'sparkle';
@@ -59,244 +311,18 @@ function createSparkles() {
         sparkle.style.top = Math.random() * 100 + '%';
         sparkle.style.animationDuration = (Math.random() * 3 + 1) + 's';
         sparklesContainer.appendChild(sparkle);
-        
+
         setTimeout(() => {
-            if (sparkle.parentNode) {
-                sparkle.remove();
-            }
+            if (sparkle.parentNode) sparkle.remove();
         }, 3000);
     }, 300);
 }
 
-// Abrir regalo y pasar a galería
-function openGift() {
-    const giftSection = document.getElementById('giftSection');
-    const gallerySection = document.getElementById('gallerySection');
-    
-    if (giftSection && gallerySection) {
-        giftSection.classList.add('fade-out');
-        setTimeout(() => {
-            giftSection.style.display = 'none';
-            gallerySection.style.display = 'flex';
-            gallerySection.classList.add('fade-in');
-        }, 800);
-    }
-}
-
-// Actualizar display de medios en la galería
-function updateMediaDisplay() {
-    const mediaContainer = document.getElementById('mediaContainer');
-    const counter = document.getElementById('galleryCounter');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const continueBtn = document.getElementById('continueBtn');
-    
-    if (!mediaContainer || !counter) return;
-    
-    const media = mediaContent[currentMediaIndex];
-    
-    if (media.type === 'video') {
-        mediaContainer.innerHTML = `<video class="media-display" controls autoplay muted>
-            <source src="${media.src}" type="video/mp4">
-            Tu navegador no soporta el tag de video.
-        </video>`;
-    } else {
-        mediaContainer.innerHTML = `<img src="${media.src}" class="media-display" alt="Momento especial ${currentMediaIndex + 1}">`;
-    }
-    
-    counter.textContent = `${currentMediaIndex + 1} de ${totalMedia}`;
-    
-    if (prevBtn) prevBtn.disabled = currentMediaIndex === 0;
-    if (nextBtn) nextBtn.disabled = currentMediaIndex === totalMedia - 1;
-    
-    if (currentMediaIndex === totalMedia - 1) {
-        if (nextBtn) nextBtn.classList.add('hidden');
-        if (continueBtn) continueBtn.classList.remove('hidden');
-    } else {
-        if (nextBtn) nextBtn.classList.remove('hidden');
-        if (continueBtn) continueBtn.classList.add('hidden');
-    }
-}
-
-// Navegar al siguiente medio
-function nextMedia() {
-    if (currentMediaIndex < totalMedia - 1) {
-        currentMediaIndex++;
-        updateMediaDisplay();
-    }
-}
-
-// Navegar al medio anterior
-function previousMedia() {
-    if (currentMediaIndex > 0) {
-        currentMediaIndex--;
-        updateMediaDisplay();
-    }
-}
-
-// Ir a la sección de la carta
-function goToLetter() {
-    const gallerySection = document.getElementById('gallerySection');
-    const letterSection = document.getElementById('letterSection');
-    
-    if (gallerySection && letterSection) {
-        gallerySection.classList.add('fade-out');
-        setTimeout(() => {
-            gallerySection.style.display = 'none';
-            letterSection.style.display = 'flex';
-            letterSection.classList.add('fade-in');
-            setTimeout(() => {
-                startTyping();
-            }, 1000);
-        }, 800);
-    }
-}
-
-// Efecto de escritura de la carta
-function startTyping() {
-    const letterTextElement = document.getElementById('letterText');
-    const cursor = document.getElementById('typingCursor');
-    
-    if (!letterTextElement) return;
-    
-    function typeCharacter() {
-        if (letterIndex < fullLetterText.length) {
-            const char = fullLetterText[letterIndex];
-            if (char === '\n') {
-                letterTextElement.innerHTML = letterTextElement.innerHTML.replace(
-                    '<span class="typing-cursor" id="typingCursor"></span>', 
-                    ''
-                ) + '<br><span class="typing-cursor" id="typingCursor"></span>';
-            } else {
-                letterTextElement.innerHTML = letterTextElement.innerHTML.replace(
-                    '<span class="typing-cursor" id="typingCursor"></span>', 
-                    char + '<span class="typing-cursor" id="typingCursor"></span>'
-                );
-            }
-            letterIndex++;
-            setTimeout(typeCharacter, typingSpeed);
-        } else {
-            // Ocultar cursor y ir a la sección final
-            if (cursor) cursor.style.display = 'none';
-            setTimeout(() => {
-                goToFinal();
-            }, 2000);
-        }
-    }
-    
-    typeCharacter();
-}
-
-// Ir a la sección final
-function goToFinal() {
-    const letterSection = document.getElementById('letterSection');
-    const finalSection = document.getElementById('finalSection');
-    
-    if (letterSection && finalSection) {
-        letterSection.classList.add('fade-out');
-        setTimeout(() => {
-            letterSection.style.display = 'none';
-            finalSection.style.display = 'flex';
-            finalSection.classList.add('fade-in');
-            // Iniciar creación del corazón
-            setTimeout(() => {
-                createPixelHeart();
-            }, 500);
-        }, 800);
-    }
-}
-
-// Crear corazón pixel por pixel
-function createPixelHeart() {
-    const container = document.getElementById('heartContainer');
-    const finalMsg = document.getElementById('finalMsg');
-    
-    if (!container) return;
-    
-    // Patrón del corazón (1 = pixel, 0 = vacío)
-    const heartPattern = [
-        [0,0,1,1,1,0,0,0,1,1,1,0,0],
-        [0,1,1,1,1,1,0,1,1,1,1,1,0],
-        [1,1,1,1,1,1,1,1,1,1,1,1,1],
-        [1,1,1,1,1,1,1,1,1,1,1,1,1],
-        [1,1,1,1,1,1,1,1,1,1,1,1,1],
-        [0,1,1,1,1,1,1,1,1,1,1,1,0],
-        [0,0,1,1,1,1,1,1,1,1,1,0,0],
-        [0,0,0,1,1,1,1,1,1,1,0,0,0],
-        [0,0,0,0,1,1,1,1,1,0,0,0,0],
-        [0,0,0,0,0,1,1,1,0,0,0,0,0],
-        [0,0,0,0,0,0,1,0,0,0,0,0,0]
-    ];
-    
-    let delay = 0;
-    
-    // Crear todos los píxeles
-    for (let row = 0; row < heartPattern.length; row++) {
-        for (let col = 0; col < heartPattern[row].length; col++) {
-            if (heartPattern[row][col] === 1) {
-                setTimeout(() => {
-                    const pixel = document.createElement('div');
-                    pixel.className = 'heart-pixel';
-                    pixel.style.left = (col * 22) + 'px';
-                    pixel.style.top = (row * 22) + 'px';
-                    container.appendChild(pixel);
-                    
-                    // Animar aparición
-                    setTimeout(() => {
-                        pixel.classList.add('animate');
-                    }, 50);
-                }, delay);
-                delay += 100;
-            }
-        }
-    }
-    
-    // Mostrar mensaje final después de que aparezcan todos los píxeles
-    setTimeout(() => {
-        if (finalMsg) {
-            finalMsg.style.animationDelay = '0s';
-        }
-        createContinuousSparkles();
-    }, delay + 1000);
-}
-
-// Crear efectos de partículas continuas
-function createContinuousSparkles() {
-    const container = document.getElementById('heartContainer');
-    if (!container) return;
-    
-    const sparkleSymbols = ['✨', '💖', '🎉', '⭐', '🌟', '💫', '🎊', '💕'];
-    
-    setInterval(() => {
-        const sparkle = document.createElement('div');
-        sparkle.className = 'sparkle-final';
-        sparkle.textContent = sparkleSymbols[Math.floor(Math.random() * sparkleSymbols.length)];
-        
-        // Posición aleatoria alrededor del corazón
-        sparkle.style.left = Math.random() * 100 + '%';
-        sparkle.style.top = Math.random() * 100 + '%';
-        
-        container.appendChild(sparkle);
-        
-        // Remover después de la animación
-        setTimeout(() => {
-            if (sparkle.parentNode) {
-                sparkle.remove();
-            }
-        }, 3000);
-    }, 600);
-}
-
-// ===== INICIALIZACIÓN =====
-
-// Inicializar página cuando el DOM esté listo
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('Página cargada - Inicializando efectos');
+// ===== Inicialización =====
+document.addEventListener("DOMContentLoaded", () => {
     createSparkles();
-    updateMediaDisplay();
 });
 
-// Asegurar que las funciones estén disponibles globalmente
 window.openGift = openGift;
 window.nextMedia = nextMedia;
 window.previousMedia = previousMedia;

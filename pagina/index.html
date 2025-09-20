@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Feliz Cumpleaños Natalia - 15 Años</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
     <!-- Sección del Regalo Inicial -->
@@ -23,13 +23,15 @@
     </section>
 
     <!-- Sección de Galería -->
-    <section class="gallery-section" id="gallerySection">
+    <section class="gallery-section" id="gallerySection" style="display:none;">
         <div class="gallery-container">
             <h2 class="gallery-title">Momentos Especiales para Ti</h2>
-            <div id="mediaContainer">
-                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDQwMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iNDAwIiBmaWxsPSIjZjBmMGYwIi8+Cjx0ZXh0IHg9IjIwMCIgeT0iMTgwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSIjOTk5IiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTgiPkZvdG8gMTwvdGV4dD4KPHN2ZyB4PSIxNzUiIHk9IjIwMCIgd2lkdGg9IjUwIiBoZWlnaHQ9IjUwIiB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9IiM5OTkiPgo8cGF0aCBkPSJNMjEgMTlWNWMwLTEuMS0uOS0yLTItMkg1Yy0xLjEgMC0yIC45LTIgMnYxNGMwIDEuMS45IDIgMiAyaDE0YzEuMSAwIDItLjkgMi0yWk04LjUgMTMuNWwzLjUgNC41IDIuNS0zLjAxTDE3LjUgMTlINS41WiIvPgo8L3N2Zz4KPC9zdmc+" class="media-display" alt="Foto especial">
-            </div>
-            <div class="gallery-counter" id="galleryCounter">1 de 4</div>
+
+            <!-- contenedor con las 3 imágenes (cada una envuelta en .media-wrapper) -->
+            <div id="mediaContainer" aria-live="polite"></div>
+
+            <div class="gallery-counter" id="galleryCounter">Página 1 de 4</div>
+
             <div class="gallery-nav">
                 <button class="nav-btn" id="prevBtn" onclick="previousMedia()" disabled>⬅ Anterior</button>
                 <button class="nav-btn" id="nextBtn" onclick="nextMedia()">Siguiente ➡</button>
@@ -39,13 +41,14 @@
     </section>
 
     <!-- Sección de Carta -->
-    <section class="letter-section" id="letterSection">
+    <section class="letter-section" id="letterSection" style="display:none;">
         <div class="letter-bg-photos">
             <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCIgZmlsbD0iI2ZmNmI5ZCIgb3BhY2l0eT0iMC4zIi8+CjxwYXRoIGQ9Ik0xMiA4djRsMyAzIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4=" class="bg-photo" alt="Decoración">
-            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCIgZmlsbD0iIzhlNDRhZCIgb3BhY2l0eT0iMC4zIi8+CjxwYXRoIGQ9Ik0xMiAydjIwTTIgMTJoMjAiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+Cjwvc3ZnPg==" class="bg-photo" alt="Decoración">
+            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCIgZmlsbD0iIzhlNDRhZCIgb3BhY2l0eT0iMC4zIi8+CjxwYXRoIGQ9Ik0xMiAydjRNMTIgMThWMjJNNCA5aDRNMTYgOWg0TTYuMzEgNi4zMWwxLjQyIDEuNDJNMTYuMjcgMTYuMjdsMS40MiAxLjQyTTYuMzEgMTcuNjlsMS40Mi0xLjQyTTE2LjI3IDcuNzNsMS40Mi0xLjQyIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4=" class="bg-photo" alt="Decoración">
             <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCIgZmlsbD0iI2ZmMTQ5MyIgb3BhY2l0eT0iMC4zIi8+CjxwYXRoIGQ9Ik0xOSAxNGMxLjQ5LTEuNDYgMy0zLjUgMy01LjVBNS41IDUuNSAwIDAgMCAxNi41IDNjLTEuNzYgMC0zIC45LTQuNSAyLjA5QzEwLjUgMy45IDkuMjQgMyA3LjUgM0E1LjUgNS41IDAgMCAwIDIgOC41YzAgMiAxLjUgNC4wNCAzIDUuNWw3IDdaIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIGZpbGw9Im5vbmUiLz4KPC9zdmc+" class="bg-photo" alt="Decoración">
             <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCIgZmlsbD0iI2M0NDY5MyIgb3BhY2l0eT0iMC4zIi8+CjxwYXRoIGQ9Ik0xMiAydjRNMTIgMThWMjJNNCA5aDRNMTYgOWg0TTYuMzEgNi4zMWwxLjQyIDEuNDJNMTYuMjcgMTYuMjdsMS40MiAxLjQyTTYuMzEgMTcuNjlsMS40Mi0xLjQyTTE2LjI3IDcuNzNsMS40Mi0xLjQyIiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4=" class="bg-photo" alt="Decoración">
         </div>
+
         <div class="letter-container">
             <h2 class="letter-title">Una Carta Especial Para Ti</h2>
             <div class="letter-text" id="letterText">
@@ -55,12 +58,14 @@
     </section>
 
     <!-- Sección Final -->
-    <section class="final-section" id="finalSection">
+    <section class="final-section" id="finalSection" style="display:none;">
         <div class="heart-container" id="heartContainer">
             <!-- El corazón se creará aquí con JavaScript -->
         </div>
         <div class="final-message" id="finalMsg">¡Feliz Cumpleaños Nata! 🎉</div>
     </section>
+
+    <audio id="bgMusic" src="audio/micancion.mp3" autoplay loop></audio>
 
     <script src="utils.js"></script>
 </body>
