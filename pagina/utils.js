@@ -141,6 +141,7 @@ function previousMedia() {
 }
 
 // ===== Abrir regalo =====
+// ===== Abrir regalo =====
 function openGift() {
     const giftSection = document.getElementById("giftSection");
     const gallerySection = document.getElementById("gallerySection");
@@ -155,8 +156,17 @@ function openGift() {
 
         currentMediaIndex = 0;
         updateMediaDisplay();
+
+        // 🎶 Reproducir música al abrir el regalo
+        const musica = document.getElementById("musica");
+        if (musica) {
+            musica.play().catch(err => {
+                console.log("El navegador bloqueó el audio:", err);
+            });
+        }
     }, 800);
 }
+
 
 // ===== Carta y corazón =====
 const letterMessage = `Querida Natalia,
