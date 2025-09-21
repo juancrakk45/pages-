@@ -121,7 +121,7 @@ function previousMedia() {
 let slideshowInterval = null;
 function startSlideshow() {
     if (slideshowInterval) return;
-    slideshowInterval = setInterval(() => nextMedia(), 4000);
+    slideshowInterval = setInterval(() => nextMedia(), 5000);
 }
 function stopSlideshow() {
     if (slideshowInterval) {

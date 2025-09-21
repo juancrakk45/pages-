@@ -187,3 +187,12 @@ body {
   50% { transform: scale(1.1); color: #e91e63; }
   100% { transform: scale(1); }
 }
+
+.media-display {
+    animation: zoomEffect 6s ease-in-out infinite alternate;
+}
+
+@keyframes zoomEffect {
+    0% { transform: scale(1) translate(0, 0); }
+    100% { transform: scale(1.1) translate(10px, 10px); }
+}
