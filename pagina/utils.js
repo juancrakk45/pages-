@@ -1,6 +1,6 @@
 // --- CONFIGURACIÓN DE GALERÍA ---
 let currentMediaIndex = 0;
-const itemsPerPage = 3;
+const itemsPerPage = 1;
 
 // Lista de imágenes
 const mediaContent = [
@@ -24,56 +24,50 @@ const mediaContent = [
     { type: "image", src: "imagen/18.jpg", alt: "Foto especial 18" },
     { type: "image", src: "imagen/19.jpg", alt: "Foto especial 19" },
     { type: "image", src: "imagen/20.jpg", alt: "Foto especial 20" },
-    { type: "image", src: "imagen/21.jpg", alt: "Foto especial 21" }, 
+    { type: "image", src: "imagen/21.jpg", alt: "Foto especial 21" },
 ];
 
 let totalMedia = mediaContent.length;
 
 // ===== FUNCIONES AUXILIARES =====
-function createImageElement(media) {
+function createMediaElement(media) {
     return new Promise((resolve) => {
-        const img = document.createElement('img');
-        img.className = 'media-display fade-in';
-        img.alt = media.alt || 'Foto especial';
-        img.style.opacity = '0';
-        img.onload = () => {
-            img.style.transition = 'opacity .25s';
-            img.style.opacity = '1';
-            resolve(img);
+        let element;
+        if (media.type === "image") {
+            element = document.createElement('img');
+            element.src = media.src;
+            element.alt = media.alt || 'Foto especial';
+        } else if (media.type === "video") {
+            element = document.createElement('video');
+            element.src = media.src;
+            element.controls = true;
+            element.muted = true;
+            element.preload = 'metadata';
+            element.playsInline = true;
+        } else {
+            resolve(document.createTextNode('Tipo no soportado'));
+            return;
+        }
+
+        element.className = 'media-display fade-in';
+        element.style.opacity = '0';
+        element.style.width = '100vw';
+        element.style.height = '100vh';
+        element.style.objectFit = 'contain'; // No recorta la imagen
+
+        element.onload = element.onloadeddata = () => {
+            element.style.transition = 'opacity .25s';
+            element.style.opacity = '1';
+            resolve(element);
         };
-        img.onerror = () => {
-            console.error('Error cargando imagen:', media.src);
-            img.style.opacity = '1';
-            img.alt = 'Imagen no disponible';
-            resolve(img);
+        element.onerror = () => {
+            console.error('Error cargando media:', media.src);
+            resolve(element);
         };
-        img.src = media.src;
     });
 }
 
-function createVideoElement(media) {
-    return new Promise((resolve) => {
-        const video = document.createElement('video');
-        video.className = 'media-display fade-in';
-        video.controls = true;
-        video.muted = true;
-        video.preload = 'metadata';
-        video.playsInline = true;
-        video.style.opacity = '0';
-        video.onloadeddata = () => {
-            video.style.transition = 'opacity .25s';
-            video.style.opacity = '1';
-            resolve(video);
-        };
-        video.onerror = () => {
-            console.error('Error cargando video:', media.src);
-            resolve(video);
-        };
-        video.src = media.src;
-    });
-}
-
-// ===== Mostrar 3 elementos =====
+// ===== ACTUALIZAR GALERÍA =====
 async function updateMediaDisplay() {
     const container = document.getElementById("mediaContainer");
     const counter = document.getElementById("galleryCounter");
@@ -85,31 +79,20 @@ async function updateMediaDisplay() {
 
     container.innerHTML = "";
 
-    const start = currentMediaIndex;
-    const end = Math.min(start + itemsPerPage, totalMedia);
-    const group = mediaContent.slice(start, end);
+    const media = mediaContent[currentMediaIndex];
+    const element = await createMediaElement(media);
 
-    const createdElements = await Promise.all(group.map(media => {
-        if (media.type === 'image') return createImageElement(media);
-        if (media.type === 'video') return createVideoElement(media);
-        return Promise.resolve(document.createTextNode('Tipo no soportado'));
-    }));
+    const wrapper = document.createElement('div');
+    wrapper.className = 'media-wrapper';
+    wrapper.appendChild(element);
+    container.appendChild(wrapper);
 
-    createdElements.forEach(el => {
-        const wrapper = document.createElement('div');
-        wrapper.className = 'media-wrapper';
-        wrapper.appendChild(el);
-        container.appendChild(wrapper);
-    });
+    counter.textContent = `Imagen ${currentMediaIndex + 1} de ${totalMedia}`;
 
-    const totalPages = Math.ceil(totalMedia / itemsPerPage) || 1;
-    const currentPage = Math.floor(currentMediaIndex / itemsPerPage) + 1;
-    counter.textContent = `Página ${currentPage} de ${totalPages}`;
-
-    if (prevBtn) prevBtn.disabled = start === 0;
+    if (prevBtn) prevBtn.disabled = currentMediaIndex === 0;
 
     if (nextBtn && continueBtn) {
-        if (end >= totalMedia) {
+        if (currentMediaIndex === totalMedia - 1) {
             nextBtn.classList.add('hidden');
             continueBtn.classList.remove('hidden');
         } else {
@@ -117,35 +100,40 @@ async function updateMediaDisplay() {
             continueBtn.classList.add('hidden');
         }
     }
-
-    const gallerySection = document.getElementById('gallerySection');
-    if (gallerySection) gallerySection.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
-// ===== Navegación manual =====
-// ===== Navegación manual =====
+// ===== NAVEGACIÓN =====
 function nextMedia() {
-    const nextIndex = currentMediaIndex + itemsPerPage;
-    if (nextIndex < totalMedia) {
-        currentMediaIndex = nextIndex;
+    if (currentMediaIndex < totalMedia - 1) {
+        currentMediaIndex++;
+        updateMediaDisplay();
     }
-    updateMediaDisplay();
 }
 
 function previousMedia() {
-    const prevIndex = currentMediaIndex - itemsPerPage;
-    if (prevIndex >= 0) {
-        currentMediaIndex = prevIndex;
+    if (currentMediaIndex > 0) {
+        currentMediaIndex--;
+        updateMediaDisplay();
     }
-    updateMediaDisplay();
 }
 
-// ===== Abrir regalo =====
-// ===== Abrir regalo =====
+// ===== SLIDESHOW =====
+let slideshowInterval = null;
+function startSlideshow() {
+    if (slideshowInterval) return;
+    slideshowInterval = setInterval(() => nextMedia(), 4000);
+}
+function stopSlideshow() {
+    if (slideshowInterval) {
+        clearInterval(slideshowInterval);
+        slideshowInterval = null;
+    }
+}
+
+// ===== ABRIR REGALO =====
 function openGift() {
     const giftSection = document.getElementById("giftSection");
     const gallerySection = document.getElementById("gallerySection");
-
     if (!giftSection || !gallerySection) return;
 
     giftSection.classList.add('fade-out');
@@ -153,21 +141,13 @@ function openGift() {
         giftSection.style.display = 'none';
         gallerySection.style.display = 'flex';
         gallerySection.classList.add('fade-in');
-
         currentMediaIndex = 0;
         updateMediaDisplay();
-
-        // 🎶 Reproducir música al abrir el regalo
         const musica = document.getElementById("musica");
-        if (musica) {
-            musica.play().catch(err => {
-                console.log("El navegador bloqueó el audio:", err);
-            });
-        }
+        if (musica) musica.play().catch(err => console.log("Audio bloqueado:", err));
+        startSlideshow();
     }, 800);
 }
-
-
 // ===== Carta y corazón =====
 const letterMessage = `Querida Natalia,
 
@@ -203,7 +183,7 @@ function typeLetter() {
         // Contador antes del corazón
         const countdown = document.createElement("div");
         countdown.id = "countdown";
-        countdown.textContent = "El corazón aparecerá en 10 segundos...";
+        countdown.textContent = "Espera 10 segundos...";
         countdown.style.marginTop = "20px";
         countdown.style.fontSize = "1.2rem";
         countdown.style.color = "#ff4081";
@@ -235,7 +215,7 @@ function goToLetter() {
             letterSection.classList.add('fade-in');
             setTimeout(() => {
                 typeLetter();
-            }, 1000);
+            }, 800);
         }, 800);
     }
 }
@@ -327,13 +307,11 @@ function createSparkles() {
         }, 3000);
     }, 300);
 }
-
 // ===== Inicialización =====
 document.addEventListener("DOMContentLoaded", () => {
-    createSparkles();
+    updateMediaDisplay();
 });
 
 window.openGift = openGift;
 window.nextMedia = nextMedia;
 window.previousMedia = previousMedia;
-window.goToLetter = goToLetter;
